@@ -1,21 +1,20 @@
 package PrecificacaoServicos;
-
-/**
- *
- * @author Cecilia Paiva
- */
 public class CustoseTempo {
     //Atributos de tempo
     private int semanas;
     private int dias;
     private float horas;
-    private int tempo;
-    private int horasInt;
-    //Metódo
-    public int calcularTempo(int semanas, int dias, float horas){
-        this.horasInt = (int)Math.ceil(horas);
-        this.tempo = this.semanas * this.dias * this.horasInt;
-        return this.tempo;
+    
+    // Construtor 
+    public CustoseTempo(int semanas, int dias, float horas){    
+        setSemanas(semanas);
+        setDias(dias);
+        setHoras(horas);
+    }
+
+    //Metódo para calcular o tempo 
+    public float calcularTempo() {
+        return (float)(this.semanas * this.dias) * (this.horas);        
     }
     
     // Setters de tempo 
@@ -30,16 +29,8 @@ public class CustoseTempo {
     public void setHoras(float horas) {
         this.horas = horas;
     }
-
-    public void setTempo(int tempo) {
-        this.tempo = tempo;
-    }
-
-    public void setHorasInt(int horasInt) {
-        this.horasInt = horasInt;
-    }
+    
     // Getters de tempo 
-
     public int getSemanas() {
         return semanas;
     }
@@ -51,14 +42,4 @@ public class CustoseTempo {
     public float getHoras() {
         return horas;
     }
-
-    public int getTempo() {
-        return tempo;
-    }
-
-    public int getHorasInt() {
-        return horasInt;
-    }
-    
-    
 }
