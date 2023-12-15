@@ -10,46 +10,63 @@ import java.util.Scanner;
 public class CalculadoraServicos {
     
     public static void main(String[] args) {
-        float custos = 0.0f;
-        float precoPorHoras = 0.0f;
-        String strLucroComPercentual = "";
-        String strLucroSemPercentual = "";
-        float lucro = 0.0f;
+        // Calculo do valor por hora 
         int sem = 0;
         int d = 0;
         float hrs = 0.0f;
-        float tempo = 0.0f;
+        float valorHora = 0.0f;
+        float custosVida = 0.0f;
+        float diasAtivosPorMes = 0.0f;
+        // Calcular valor sugerido
+        float custosServico = 0.0f;
+        float tempoGasto = 0.0f;
+        String strLucroComPercentual = "";
+        String strLucroSemPercentual = "";
+        float margemLucro = 0.0f; 
         
-        CustoseTempo calculadora = new CustoseTempo(sem, d, hrs);
+        // Instanciando classes 
+        CustoseTempo calculadora = new CustoseTempo(sem, d, hrs, custosVida, diasAtivosPorMes, custosServico, margemLucro, tempoGasto);
         Scanner leitor = new Scanner(System.in);
         
-        // Calculando o preço por horas 
-        System.out.print("Qual os seus gastos por mês? ");
-        custos = leitor.nextFloat();
-        
-        System.out.print("Quantas semanas você vai trabalhar neste projeto/serviço? ");
-        calculadora.setSemanas(leitor.nextInt());
-        System.out.print("Quantos dias por semana você vai trabalhar neste projeto/serviço?? ");
-        calculadora.setDias(leitor.nextInt());
-        System.out.print("Quantas horas por dia você vai trabalhar neste projeto/serviço? ");
-        calculadora.setHoras(leitor.nextFloat());
-        tempo = calculadora.calcularTempo();
+        // Calcular o VALOR POR HORA de trabalho mensal 
+        System.out.println("VAMOS CALCULAR SEU PREÇO POR HORA");
+        System.out.println("Qual o seu custo de vida por mês? ");
+        custosVida = leitor.nextFloat();
+        System.out.println("Quantas semanas você trabalha por mês? ");
+        sem = leitor.nextInt();
+        System.out.println("Quantos dias por semana? ");
+        d = leitor.nextInt();
+        System.out.println("Quantas horas por dia? ");
+        hrs = leitor.nextFloat();
+        valorHora = calculadora.valorPorHora(custosVida, diasAtivosPorMes);
+        System.out.println("Seu valor por hora de trabalho é " + valorHora);
+   
+        // Calculando o valor sugerido 
+        System.out.println("Qual é o custo do serviço/projeto? ");
+        calculadora.setCustosDoServico(leitor.nextFloat());
+        System.out.println("Qual a margem de lucro desejada em cima desse custo? ");
         // Criamos uma STR para pegar o numero com % e outra para retirar esse %
         // e com o Float.parseFloat() convertemos STR para float
-        System.out.print("Qual sua margem de lucro para esse serviço?");
         strLucroComPercentual = leitor.next();
         strLucroSemPercentual = strLucroComPercentual.replace("%", " ");
-        lucro = Float.parseFloat(strLucroSemPercentual);
-   
+        margemLucro = Float.parseFloat(strLucroSemPercentual);
         //Para certificar se a margem de lucro será um valor positivo
-        if(lucro > 0){
-            lucro = lucro / 100;
-            precoPorHoras = (custos / tempo) * lucro;
-            precoPorHoras += custos / tempo;
-            System.out.print("O valor sugerido é R$" + (precoPorHoras * tempo) + " com base no seu preço por horas e tempo de trabalho no projeto.");
+        if(margemLucro > 0){
+            calculadora.setMargemDeLucro(margemLucro);
         }else {
-            System.out.print("A margem de lucro inserida, não é um valor positivo.");
+            while(margemLucro < 0){
+                System.out.print("Ops, a margem de lucro inserida, não é um valor positivo. Tente novamente inserindo uma porcentagem positiva.");
+                System.out.println("Qual a margem de lucro desejada em cima desse custo? ");
+                strLucroComPercentual = leitor.next();
+                strLucroSemPercentual = strLucroComPercentual.replace("%", " ");
+                margemLucro = Float.parseFloat(strLucroSemPercentual);
+            }
         }
-        System.out.print("ATENÇÃO\nLeve em consideração o seu nível de experiência.");
+        System.out.println("Quanto tempo você gastará para executar este serviço/projeto? ");
+        calculadora.setTempoGastoServico(leitor.nextFloat());
+        float valorServico = calculadora.valorSugerido();
+        System.out.println("O valor sugerido é R$ " + valorServico);
+  
+        System.out.println("ATENÇÃO\nLeve em consideração o seu nível de experiência.");
     }
 }
